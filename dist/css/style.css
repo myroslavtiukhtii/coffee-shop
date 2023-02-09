@@ -1,0 +1,415 @@
+@charset "UTF-8";
+
+* {
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  min-width: 320px;
+}
+
+body {
+  color: #64646A;
+  line-height: 1;
+  font-family: "Jost";
+  font-size: 1.5rem;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input,
+button,
+textarea {
+  font-family: "Jost";
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  color: inherit;
+  background-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+svg {
+  height: 1em;
+  width: 1em;
+}
+
+svg path {
+  stroke: inherit;
+  fill: inherit;
+}
+
+.lock body {
+  overflow: hidden;
+  -ms-touch-action: none;
+      touch-action: none;
+  -ms-scroll-chaining: none;
+      overscroll-behavior: none;
+}
+
+.wrapper {
+  min-height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  overflow: hidden;
+}
+
+@supports (overflow: clip) {
+  .wrapper {
+    overflow: clip;
+  }
+}
+
+.wrapper > main {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+.wrapper > * {
+  min-width: 0;
+}
+
+/*
+(i) Стилі будуть застосовуватись до
+всіх класів, що містять *__container
+Наприклад header__container, main__container і т.п.
+Сніппет (HTML): cnt
+*/
+
+[class*=__container] {
+  max-width: 79.375rem;
+  margin: 0 auto;
+  padding: 0 0.9375rem;
+}
+
+[class*=-ibg] {
+  position: relative;
+}
+
+[class*=-ibg] img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+[class*=-ibg_contain] img {
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+body {
+  background-color: #EEEFF1;
+}
+
+.header__container {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  min-height: 104px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 432px 284px;
+  grid-template-columns: 1fr 432px 284px;
+  -webkit-column-gap: 40px;
+     -moz-column-gap: 40px;
+          column-gap: 40px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.header .menu__list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.header .menu__list .list__item:not(:last-child) {
+  margin-right: 40px;
+}
+
+.header .menu__list .list__item .item__link {
+  position: relative;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  color: #1B1B1D;
+  -webkit-transition: 0.3s ease-in;
+  -o-transition: 0.3s ease-in;
+  transition: 0.3s ease-in;
+}
+
+.header .menu__list .list__item .item__link::after {
+  content: "";
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: transparent;
+  border-bottom: 1px dashed #1B1B1D;
+  -webkit-transition: 0.3s ease-in;
+  -o-transition: 0.3s ease-in;
+  transition: 0.3s ease-in;
+}
+
+.header .header__buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.header .header__buttons .header__basket {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid transparent;
+  -webkit-box-shadow: 0px 30px 60px rgba(163, 168, 179, 0.15);
+          box-shadow: 0px 30px 60px rgba(163, 168, 179, 0.15);
+  margin-right: 20px;
+  background-clip: content-box;
+  -webkit-transition: 0.3s ease-in;
+  -o-transition: 0.3s ease-in;
+  transition: 0.3s ease-in;
+}
+
+.header .header__buttons .header__basket .basket__icon {
+  width: 24px;
+  height: 24px;
+  -webkit-transition: 0.3s ease-in;
+  -o-transition: 0.3s ease-in;
+  transition: 0.3s ease-in;
+}
+
+.header .header__buttons .header__vauchers {
+  width: 208px;
+  height: 56px;
+  background: #1B1B1D;
+  -webkit-box-shadow: 0px 30px 60px rgba(163, 168, 179, 0.15);
+          box-shadow: 0px 30px 60px rgba(163, 168, 179, 0.15);
+  border-radius: 63px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 26px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  -webkit-transition: 0.3s ease-in;
+  -o-transition: 0.3s ease-in;
+  transition: 0.3s ease-in;
+}
+
+html.menu-open .header__container .header__menu {
+  left: 0;
+  opacity: 1;
+}
+
+.header__burger {
+  justify-self: flex-end;
+  display: none;
+}
+
+@media only screen and (max-width: 61.99875em) {
+  .header__container {
+    -ms-grid-columns: 1fr 1fr 40px;
+    grid-template-columns: 1fr 1fr 40px;
+    -webkit-column-gap: 10px;
+       -moz-column-gap: 10px;
+            column-gap: 10px;
+  }
+
+  .header .header__menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: #FFFFFF;
+    padding-top: 90px;
+    -webkit-transition: 0.4s ease-in;
+    -o-transition: 0.4s ease-in;
+    transition: 0.4s ease-in;
+    opacity: 0;
+  }
+
+  .header .header__menu .menu__list {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    row-gap: 25px;
+  }
+
+  .header .header__menu .menu__list .list__item:not(:last-child) {
+    margin-right: 0;
+  }
+
+  .header .header__menu .menu__list .list__item .item__link {
+    font-size: 25px;
+  }
+
+  .header .header__buttons {
+    justify-self: flex-end;
+  }
+
+  .header .header__buttons .header__vauchers {
+    display: none;
+  }
+}
+
+@media (max-width: 61.99875em) {
+  .header__burger {
+    display: block;
+    position: relative;
+    width: 1.875rem;
+    height: 1.125rem;
+    z-index: 5;
+  }
+
+  .header__burger span,
+  .header__burger::before,
+  .header__burger::after {
+    content: "";
+    -webkit-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    right: 0;
+    position: absolute;
+    width: 100%;
+    height: 0.125rem;
+    background-color: #000;
+  }
+
+  .header__burger::before {
+    top: 0;
+  }
+
+  .header__burger::after {
+    bottom: 0;
+  }
+
+  .header__burger span {
+    top: calc(50% - 0.0625rem);
+  }
+
+  .menu-open .header__burger span {
+    width: 0;
+  }
+
+  .menu-open .header__burger::before {
+    top: calc(50% - 0.0625rem);
+    -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+  }
+
+  .menu-open .header__burger::after {
+    bottom: calc(50% - 0.0625rem);
+    -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+  }
+}
+
+@media (max-width: 61.99875em) and (any-hover: none) {
+  .header__burger {
+    cursor: default;
+  }
+}
+
+@media (any-hover: hover) {
+  .header .menu__list .list__item:hover .item__link::after {
+    width: 100%;
+  }
+
+  .header .header__buttons .header__basket:hover {
+    border: 1px solid #2fa649;
+    padding: 2px;
+    -webkit-box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  }
+
+  .header .header__buttons .header__basket:hover .basket__icon {
+    -webkit-transform: rotate(5deg);
+        -ms-transform: rotate(5deg);
+            transform: rotate(5deg);
+    scale: 1.1;
+    fill: #2fa649;
+  }
+
+  .header .header__buttons .header__vauchers:hover {
+    background-color: #FFFFFF;
+    color: #1B1B1D;
+    border: 1px solid #1B1B1D;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  }
+}
