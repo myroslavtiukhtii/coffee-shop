@@ -2942,6 +2942,39 @@
             },
             on: {}
         });
+        if (document.querySelector(".swiper__best")) new core(".swiper__best", {
+            modules: [ Navigation ],
+            observer: true,
+            observeParents: true,
+            spaceBetween: 10,
+            autoHeight: true,
+            speed: 800,
+            grabCursor: true,
+            slidesPerView: 1.1,
+            navigation: {
+                prevEl: ".swiper-button-prev",
+                nextEl: ".swiper-button-next"
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 10
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
+                },
+                1100: {
+                    slidesPerView: 2.1,
+                    spaceBetween: 30
+                },
+                1268: {
+                    slidesPerView: 3,
+                    spaceBetween: 40
+                }
+            },
+            on: {}
+        });
     }
     window.addEventListener("load", (function(e) {
         initSliders();
