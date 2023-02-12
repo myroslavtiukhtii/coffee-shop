@@ -300,6 +300,14 @@
         }
         return parents;
     }
+    function utils_elementTransitionEnd(el, callback) {
+        function fireCallBack(e) {
+            if (e.target !== el) return;
+            callback.call(el, e);
+            el.removeEventListener("transitionend", fireCallBack);
+        }
+        if (callback) el.addEventListener("transitionend", fireCallBack);
+    }
     function utils_elementOuterSize(el, size, includeMargins) {
         const window = ssr_window_esm_getWindow();
         if (includeMargins) return el["width" === size ? "offsetWidth" : "offsetHeight"] + parseFloat(window.getComputedStyle(el, null).getPropertyValue("width" === size ? "margin-right" : "margin-top")) + parseFloat(window.getComputedStyle(el, null).getPropertyValue("width" === size ? "margin-left" : "margin-bottom"));
@@ -2751,6 +2759,37 @@
         }
         return transformEl;
     }
+    function effect_virtual_transition_end_effectVirtualTransitionEnd({swiper, duration, transformElements, allSlides}) {
+        const {activeIndex} = swiper;
+        const getSlide = el => {
+            if (!el.parentElement) {
+                const slide = swiper.slides.filter((slideEl => slideEl.shadowEl && slideEl.shadowEl === el.parentNode))[0];
+                return slide;
+            }
+            return el.parentElement;
+        };
+        if (swiper.params.virtualTranslate && 0 !== duration) {
+            let eventTriggered = false;
+            let transitionEndTarget;
+            if (allSlides) transitionEndTarget = transformElements; else transitionEndTarget = transformElements.filter((transformEl => {
+                const el = transformEl.classList.contains("swiper-slide-transform") ? getSlide(transformEl) : transformEl;
+                return utils_elementIndex(el) === activeIndex;
+            }));
+            transitionEndTarget.forEach((el => {
+                utils_elementTransitionEnd(el, (() => {
+                    if (eventTriggered) return;
+                    if (!swiper || swiper.destroyed) return;
+                    eventTriggered = true;
+                    swiper.animating = false;
+                    const evt = new window.CustomEvent("transitionend", {
+                        bubbles: true,
+                        cancelable: true
+                    });
+                    swiper.wrapperEl.dispatchEvent(evt);
+                }));
+            }));
+        }
+    }
     function create_shadow_createShadow(params, slideEl, side) {
         const shadowClass = `swiper-slide-shadow${side ? `-${side}` : ""}`;
         const shadowContainer = utils_getSlideTransformEl(slideEl);
@@ -2875,6 +2914,88 @@
             })
         });
     }
+    function EffectCards({swiper, extendParams, on}) {
+        extendParams({
+            cardsEffect: {
+                slideShadows: true,
+                rotate: true,
+                perSlideRotate: 2,
+                perSlideOffset: 8
+            }
+        });
+        const setTranslate = () => {
+            const {slides, activeIndex} = swiper;
+            const params = swiper.params.cardsEffect;
+            const {startTranslate, isTouched} = swiper.touchEventsData;
+            const currentTranslate = swiper.translate;
+            for (let i = 0; i < slides.length; i += 1) {
+                const slideEl = slides[i];
+                const slideProgress = slideEl.progress;
+                const progress = Math.min(Math.max(slideProgress, -4), 4);
+                let offset = slideEl.swiperSlideOffset;
+                if (swiper.params.centeredSlides && !swiper.params.cssMode) swiper.wrapperEl.style.transform = `translateX(${swiper.minTranslate()}px)`;
+                if (swiper.params.centeredSlides && swiper.params.cssMode) offset -= slides[0].swiperSlideOffset;
+                let tX = swiper.params.cssMode ? -offset - swiper.translate : -offset;
+                let tY = 0;
+                const tZ = -100 * Math.abs(progress);
+                let scale = 1;
+                let rotate = -params.perSlideRotate * progress;
+                let tXAdd = params.perSlideOffset - .75 * Math.abs(progress);
+                const slideIndex = swiper.virtual && swiper.params.virtual.enabled ? swiper.virtual.from + i : i;
+                const isSwipeToNext = (slideIndex === activeIndex || slideIndex === activeIndex - 1) && progress > 0 && progress < 1 && (isTouched || swiper.params.cssMode) && currentTranslate < startTranslate;
+                const isSwipeToPrev = (slideIndex === activeIndex || slideIndex === activeIndex + 1) && progress < 0 && progress > -1 && (isTouched || swiper.params.cssMode) && currentTranslate > startTranslate;
+                if (isSwipeToNext || isSwipeToPrev) {
+                    const subProgress = (1 - Math.abs((Math.abs(progress) - .5) / .5)) ** .5;
+                    rotate += -28 * progress * subProgress;
+                    scale += -.5 * subProgress;
+                    tXAdd += 96 * subProgress;
+                    tY = `${-25 * subProgress * Math.abs(progress)}%`;
+                }
+                if (progress < 0) tX = `calc(${tX}px + (${tXAdd * Math.abs(progress)}%))`; else if (progress > 0) tX = `calc(${tX}px + (-${tXAdd * Math.abs(progress)}%))`; else tX = `${tX}px`;
+                if (!swiper.isHorizontal()) {
+                    const prevY = tY;
+                    tY = tX;
+                    tX = prevY;
+                }
+                const scaleString = progress < 0 ? `${1 + (1 - scale) * progress}` : `${1 - (1 - scale) * progress}`;
+                const transform = `\n        translate3d(${tX}, ${tY}, ${tZ}px)\n        rotateZ(${params.rotate ? rotate : 0}deg)\n        scale(${scaleString})\n      `;
+                if (params.slideShadows) {
+                    let shadowEl = slideEl.querySelector(".swiper-slide-shadow");
+                    if (!shadowEl) shadowEl = create_shadow_createShadow(params, slideEl);
+                    if (shadowEl) shadowEl.style.opacity = Math.min(Math.max((Math.abs(progress) - .5) / .5, 0), 1);
+                }
+                slideEl.style.zIndex = -Math.abs(Math.round(slideProgress)) + slides.length;
+                const targetEl = effect_target_effectTarget(params, slideEl);
+                targetEl.style.transform = transform;
+            }
+        };
+        const setTransition = duration => {
+            const transformElements = swiper.slides.map((slideEl => utils_getSlideTransformEl(slideEl)));
+            transformElements.forEach((el => {
+                el.style.transitionDuration = `${duration}ms`;
+                el.querySelectorAll(".swiper-slide-shadow").forEach((shadowEl => {
+                    shadowEl.style.transitionDuration = `${duration}ms`;
+                }));
+            }));
+            effect_virtual_transition_end_effectVirtualTransitionEnd({
+                swiper,
+                duration,
+                transformElements
+            });
+        };
+        effect_init_effectInit({
+            effect: "cards",
+            swiper,
+            on,
+            setTranslate,
+            setTransition,
+            perspective: () => true,
+            overwriteParams: () => ({
+                watchSlidesProgress: true,
+                virtualTranslate: !swiper.params.cssMode
+            })
+        });
+    }
     function initSliders() {
         if (document.querySelector(".swiper")) new core(".swiper", {
             modules: [ Navigation, EffectCoverflow ],
@@ -2971,6 +3092,43 @@
                 1268: {
                     slidesPerView: 3,
                     spaceBetween: 40
+                }
+            },
+            on: {}
+        });
+        if (document.querySelector(".review__swiper")) new core(".review__swiper", {
+            modules: [ Navigation, EffectCards ],
+            observer: true,
+            observeParents: true,
+            spaceBetween: 10,
+            autoHeight: true,
+            speed: 800,
+            grabCursor: true,
+            slidesPerView: 1.5,
+            centeredSlides: true,
+            loop: true,
+            effect: "cards",
+            loop: true,
+            navigation: {
+                prevEl: ".swiper-button-prev",
+                nextEl: ".swiper-button-next"
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 10
+                },
+                768: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 10
+                },
+                1100: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 10
+                },
+                1268: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 10
                 }
             },
             on: {}
