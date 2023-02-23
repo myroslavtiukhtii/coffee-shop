@@ -1428,7 +1428,6 @@ html.menu-open .header__container .header__menu {
 .review__title {
   font-style: normal;
   font-weight: 800;
-  line-height: 70px;
   color: #1B1B1D;
   margin-bottom: 40px;
 }
@@ -1451,8 +1450,6 @@ html.menu-open .header__container .header__menu {
 
 .review__titles .titles__buttons .swiper-button-prev,
 .review__titles .titles__buttons .swiper-button-next {
-  width: 60px;
-  height: 60px;
   background-color: #fff;
   border-radius: 50%;
   -webkit-transition: 0.3s ease-in;
@@ -2170,8 +2167,22 @@ swiper-container:not(.swiper-watch-progress) .swiper-lazy-preloader {
     margin-bottom: 2.5rem;
   }
 
+  .review__title {
+    line-height: 4.375rem;
+  }
+
   .review__titles {
     min-height: 25rem;
+  }
+
+  .review__titles .titles__buttons .swiper-button-prev,
+  .review__titles .titles__buttons .swiper-button-next {
+    width: 3.75rem;
+  }
+
+  .review__titles .titles__buttons .swiper-button-prev,
+  .review__titles .titles__buttons .swiper-button-next {
+    height: 3.75rem;
   }
 
   .review__raitings .raitings__main {
@@ -2631,8 +2642,22 @@ swiper-container:not(.swiper-watch-progress) .swiper-lazy-preloader {
     margin-bottom: 1.25rem;
   }
 
+  .review__title {
+    line-height: 3.125rem;
+  }
+
   .review__titles {
     min-height: 18.75rem;
+  }
+
+  .review__titles .titles__buttons .swiper-button-prev,
+  .review__titles .titles__buttons .swiper-button-next {
+    width: 3.4375rem;
+  }
+
+  .review__titles .titles__buttons .swiper-button-prev,
+  .review__titles .titles__buttons .swiper-button-next {
+    height: 3.4375rem;
   }
 
   .review__raitings .raitings__main {
@@ -3806,6 +3831,18 @@ swiper-container:not(.swiper-watch-progress) .swiper-lazy-preloader {
     }
 }
 
+@supports (line-height: clamp( 3.125rem , 2.7039473684rem  +  2.1052631579vw , 4.375rem )) {
+    .review__title {
+      line-height: clamp( 3.125rem , 2.7039473684rem  +  2.1052631579vw , 4.375rem );
+    }
+}
+
+@supports not (line-height: clamp( 3.125rem , 2.7039473684rem  +  2.1052631579vw , 4.375rem )) {
+    .review__title {
+      line-height: calc(3.125rem + 1.25 * (100vw - 20rem) / 59.375);
+    }
+}
+
 @supports (min-height: clamp( 18.75rem , 16.6447368421rem  +  10.5263157895vw , 25rem )) {
     .review__titles {
       min-height: clamp( 18.75rem , 16.6447368421rem  +  10.5263157895vw , 25rem );
@@ -3815,6 +3852,34 @@ swiper-container:not(.swiper-watch-progress) .swiper-lazy-preloader {
 @supports not (min-height: clamp( 18.75rem , 16.6447368421rem  +  10.5263157895vw , 25rem )) {
     .review__titles {
       min-height: calc(18.75rem + 6.25 * (100vw - 20rem) / 59.375);
+    }
+}
+
+@supports (width: clamp( 3.4375rem , 3.3322368421rem  +  0.5263157895vw , 3.75rem )) {
+    .review__titles .titles__buttons .swiper-button-prev,
+    .review__titles .titles__buttons .swiper-button-next {
+      width: clamp( 3.4375rem , 3.3322368421rem  +  0.5263157895vw , 3.75rem );
+    }
+}
+
+@supports not (width: clamp( 3.4375rem , 3.3322368421rem  +  0.5263157895vw , 3.75rem )) {
+    .review__titles .titles__buttons .swiper-button-prev,
+    .review__titles .titles__buttons .swiper-button-next {
+      width: calc(3.4375rem + 0.3125 * (100vw - 20rem) / 59.375);
+    }
+}
+
+@supports (height: clamp( 3.4375rem , 3.3322368421rem  +  0.5263157895vw , 3.75rem )) {
+    .review__titles .titles__buttons .swiper-button-prev,
+    .review__titles .titles__buttons .swiper-button-next {
+      height: clamp( 3.4375rem , 3.3322368421rem  +  0.5263157895vw , 3.75rem );
+    }
+}
+
+@supports not (height: clamp( 3.4375rem , 3.3322368421rem  +  0.5263157895vw , 3.75rem )) {
+    .review__titles .titles__buttons .swiper-button-prev,
+    .review__titles .titles__buttons .swiper-button-next {
+      height: calc(3.4375rem + 0.3125 * (100vw - 20rem) / 59.375);
     }
 }
 
